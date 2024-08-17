@@ -2,7 +2,7 @@
 
 namespace ChatGPTClone.Domain.ValueObjects
 {
-    public class ChatMessage
+    public sealed class ChatMessage
     {
         public string Id { get; set; }
         public GptModelType Model { get; set; }
