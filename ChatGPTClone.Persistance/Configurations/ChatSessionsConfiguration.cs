@@ -1,6 +1,7 @@
 ﻿using ChatGPTClone.Domain.Entities;
 using ChatGPTClone.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.Text.Json;
 
@@ -35,12 +36,16 @@ public class ChatSessionConfiguration : IEntityTypeConfiguration<ChatSession>
             WriteIndented = true
         };
 
-        // Configure value conversion for Threads
         builder.Property(p => p.Threads)
-            .HasConversion(
-                v => JsonSerializer.Serialize(v, jsonOptions),
-                v => JsonSerializer.Deserialize<List<ChatThread>>(v, jsonOptions) ?? new List<ChatThread>()
-            );
+         .HasConversion(
+             v => JsonSerializer.Serialize(v, jsonOptions),
+             v => JsonSerializer.Deserialize<List<ChatThread>>(v, jsonOptions) ?? new List<ChatThread>(),
+             new ValueComparer<List<ChatThread>>(
+                 (c1, c2) => JsonSerializer.Serialize(c1, jsonOptions) == JsonSerializer.Serialize(c2, jsonOptions),
+                 c => c == null ? 0 : JsonSerializer.Serialize(c, jsonOptions).GetHashCode(),
+                 c => JsonSerializer.Deserialize<List<ChatThread>>(JsonSerializer.Serialize(c, jsonOptions), jsonOptions)
+             )
+         );
 
         // Index on JSONB column for better performance
         builder.HasIndex(p => p.Threads)
