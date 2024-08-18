@@ -2,8 +2,8 @@
 {
     public enum ChatMessageType
     {
-        System=1,
-        User=2,
-        Assistant=3
+        System = 1,
+        User = 2,
+        Assistant = 3
     }
 }
