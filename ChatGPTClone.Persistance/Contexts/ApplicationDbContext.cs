@@ -11,6 +11,11 @@ namespace ChatGPTClone.Persistance.Contexts
         {
 
         }
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+            base.OnModelCreating(builder);
+        }
         public DbSet<ChatSession> ChatSessions { get; set; }
     }
 }
