@@ -46,8 +46,6 @@ public class ChatSessionConfiguration : IEntityTypeConfiguration<ChatSession>
         builder.HasIndex(p => p.Threads)
             .HasMethod("gin");
 
-        // Configure JSONB operations
-        builder.HasQueryFilter(p => EF.Functions.JsonContains(p.Threads, @"{""id"": ""some-id""}"));
 
         //// AppUser relationship
         //builder.HasOne(p => p.AppUser)
