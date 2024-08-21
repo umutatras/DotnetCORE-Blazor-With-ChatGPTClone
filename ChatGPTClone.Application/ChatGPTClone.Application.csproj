@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ChatGPTClone.Domain\ChatGPTClone.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
