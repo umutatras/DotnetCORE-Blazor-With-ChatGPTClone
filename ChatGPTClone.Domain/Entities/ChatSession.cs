@@ -14,7 +14,6 @@ namespace ChatGPTClone.Domain.Entities
         public List<ChatThread> Threads { get; set; } = [];
 
         public Guid AppUserId { get; set; }
-        public AppUser AppUser { get; set; }
         //Eğer bu projede ICollection tanımlanmış ise ilişkiyi temsil edecektir.
         //public ICollection<ChatMessage> Messages { get; set; }
     }

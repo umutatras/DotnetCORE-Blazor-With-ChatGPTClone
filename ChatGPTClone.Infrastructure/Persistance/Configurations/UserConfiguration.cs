@@ -52,8 +52,8 @@ public class UserConfiguration : IEntityTypeConfiguration<AppUser>
         builder.HasMany<AppUserRole>().WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
 
         // Each User can have many Orders
-        builder.HasMany<ChatSession>(x => x.ChatSessions)
-            .WithOne(o => o.AppUser)
+        builder.HasMany<ChatSession>()
+            .WithOne()
             .HasForeignKey(x => x.AppUserId);
 
         // Common Properties

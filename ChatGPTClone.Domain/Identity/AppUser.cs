@@ -13,6 +13,5 @@ namespace ChatGPTClone.Domain.Identity
         public DateTimeOffset CreatedOn { get; set; }
         public string CreatedByUserId { get; set; }
 
-        public ICollection<ChatSession> ChatSessions { get; set; }
     }
 }
