@@ -6,15 +6,20 @@ namespace ChatGPTClone.Application.Features.ChatSessions.Commands.Create
     public class ChatSessionCreateCommandHandler : IRequestHandler<ChatSessionCreateCommand, Guid>
     {
         private readonly IApplicationDbContext _context;
-
-        public ChatSessionCreateCommandHandler(IApplicationDbContext context)
+        private readonly ICurrentUserService _currentUserService;
+        public ChatSessionCreateCommandHandler(IApplicationDbContext context, ICurrentUserService currentUserService)
         {
             _context = context;
+            _currentUserService = currentUserService;
         }
 
-        public Task<Guid> Handle(ChatSessionCreateCommand request, CancellationToken cancellationToken)
+        public async Task<Guid> Handle(ChatSessionCreateCommand request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var chatSession=request.ToChatSession(_currentUserService.UserId);
+
+            _context.ChatSessions.Add(chatSession);
+            await _context.SaveChangesAsync(cancellationToken);
+            return chatSession.Id;
         }
     }
 }
