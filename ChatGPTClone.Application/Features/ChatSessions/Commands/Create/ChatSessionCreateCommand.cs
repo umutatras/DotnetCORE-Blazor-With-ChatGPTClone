@@ -40,15 +40,7 @@ namespace ChatGPTClone.Application.Features.ChatSessions.Commands.Create
                                 Type = ChatMessageType.System,
                                 Content = "You're a very helpful and happy assistant which loves to help people.",
                                 CreatedOn = DateTimeOffset.UtcNow
-                            }
-                        ]
-                    },
-                    new ChatThread()
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        CreatedOn = DateTimeOffset.UtcNow,
-                        Messages =
-                        [
+                            },
                             new ChatMessage()
                             {
                                 Id = Guid.NewGuid().ToString(),
@@ -58,7 +50,7 @@ namespace ChatGPTClone.Application.Features.ChatSessions.Commands.Create
                                 CreatedOn = DateTimeOffset.UtcNow
                             }
                         ]
-                    }
+                    },
                 ]
             };
         }
