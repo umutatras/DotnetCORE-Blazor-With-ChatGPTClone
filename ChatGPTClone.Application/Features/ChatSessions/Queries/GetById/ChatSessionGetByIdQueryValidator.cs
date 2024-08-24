@@ -14,7 +14,8 @@ namespace ChatGPTClone.Application.Features.ChatSessions.Queries.GetById
             RuleFor(p => p.Id)
                 .NotEmpty()
                 .NotNull()
-                .MustAsync(BeValidIdAsync);
+                .MustAsync(BeValidIdAsync)
+                .WithMessage("The selected was not found.");
         }
         private Task<bool> BeValidIdAsync(Guid id,CancellationToken cancellationToken)
         {
