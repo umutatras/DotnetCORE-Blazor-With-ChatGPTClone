@@ -1,6 +1,6 @@
 ﻿using ChatGPTClone.Application.Common.Interfaces;
 using ChatGPTClone.Domain.Entities;
-using ChatGPTClone.Domain.Identity;
+using ChatGPTClone.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

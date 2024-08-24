@@ -2,7 +2,7 @@
 using ChatGPTClone.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 
-namespace ChatGPTClone.Domain.Identity
+namespace ChatGPTClone.Infrastructure.Identity
 {
     public class AppUser : IdentityUser<Guid>, IEntity, ICreatedByEntity, IModifiedByEntity
     {

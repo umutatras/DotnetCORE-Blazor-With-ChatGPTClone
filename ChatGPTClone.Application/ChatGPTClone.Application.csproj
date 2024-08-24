@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\ChatSessions\Queries\" />
+    <Folder Include="Features\ChatSessions\Commands\Add\" />
   </ItemGroup>
 
 </Project>

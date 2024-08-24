@@ -1,10 +1,10 @@
-﻿using ChatGPTClone.Domain.Identity;
+﻿using ChatGPTClone.Infrastructure.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ChatGPTClone.Persistence.Configurations;
 
-public class RoleClaimConfiguration:IEntityTypeConfiguration<AppRoleClaim>
+public class RoleClaimConfiguration : IEntityTypeConfiguration<AppRoleClaim>
 {
     public void Configure(EntityTypeBuilder<AppRoleClaim> builder)
     {

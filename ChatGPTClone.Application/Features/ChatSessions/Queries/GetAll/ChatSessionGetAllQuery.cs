@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChatGPTClone.Application.Features.ChatSessions.Commands.Add
+namespace ChatGPTClone.Application.Features.ChatSessions.Queries.GetAll
 {
-    public class ChatSessionAddCommand
+    public class ChatSessionGetAllQuery
     {
     }
 }

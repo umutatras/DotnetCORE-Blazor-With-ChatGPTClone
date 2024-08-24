@@ -1,6 +1,5 @@
 ﻿using ChatGPTClone.Domain.Common;
 using ChatGPTClone.Domain.Enums;
-using ChatGPTClone.Domain.Identity;
 using ChatGPTClone.Domain.ValueObjects;
 
 namespace ChatGPTClone.Domain.Entities

@@ -1,5 +1,5 @@
 using ChatGPTClone.Domain.Entities;
-using ChatGPTClone.Domain.Identity;
+using ChatGPTClone.Infrastructure.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -23,7 +23,7 @@ public class UserConfiguration : IEntityTypeConfiguration<AppUser>
         // Limit the size of columns to use efficient database types
         builder.Property(u => u.UserName).HasMaxLength(100);
         builder.Property(u => u.NormalizedUserName).HasMaxLength(100);
-            
+
         //Email
         builder.Property(u => u.Email).IsRequired();
         builder.HasIndex(user => user.Email).IsUnique();
