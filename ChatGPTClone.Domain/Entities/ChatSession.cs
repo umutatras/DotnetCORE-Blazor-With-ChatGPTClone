@@ -9,7 +9,6 @@ namespace ChatGPTClone.Domain.Entities
         public string Title { get; set; }
         public GptModelType Model { get; set; }
         //Eğer bu projede list tanımlanmış ise json olarak tutulacaktır.
-        public List<ChatMessage> Messages { get; set; } = [];
         public List<ChatThread> Threads { get; set; } = [];
 
         public Guid AppUserId { get; set; }
