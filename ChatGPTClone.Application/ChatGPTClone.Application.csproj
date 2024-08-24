@@ -15,8 +15,4 @@
     <ProjectReference Include="..\ChatGPTClone.Domain\ChatGPTClone.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\ChatSessions\Commands\Add\" />
-  </ItemGroup>
-
 </Project>
