@@ -1,4 +1,5 @@
 using ChatGPTClone.Infrastructure;
+using ChatGPTClone.WebApi;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -8,6 +9,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddWebApi(builder.Configuration);
 
 var app = builder.Build();
 
