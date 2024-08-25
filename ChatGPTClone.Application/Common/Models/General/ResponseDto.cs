@@ -39,8 +39,6 @@ namespace ChatGPTClone.Application.Common.Models.General
             Success = false;
         }
 
-        // new ResponseDto(chatSession,"ChatSession was created successfully.");
-
         public ResponseDto(T data, string message, bool success, List<ErrorDto> errors) : this(data, message, errors)
         {
             Success = success;

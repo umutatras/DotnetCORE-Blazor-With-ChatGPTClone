@@ -14,13 +14,17 @@ namespace ChatGPTClone.Application.Features.ChatSessions.Commands.Create
             _currentUserService = currentUserService;
         }
 
-        public async Task<Guid> Handle(ChatSessionCreateCommand request, CancellationToken cancellationToken)
+        public async Task<ResponseDto<Guid>> Handle(ChatSessionCreateCommand request, CancellationToken cancellationToken)
         {
-            var chatSession=request.ToChatSession(_currentUserService.UserId);
+
+            var chatSession = request.ToChatSession(_currentUserService.UserId);
 
             _context.ChatSessions.Add(chatSession);
+
             await _context.SaveChangesAsync(cancellationToken);
+
             return new ResponseDto<Guid>(chatSession.Id, "A new chat session was created successfully.");
         }
+     
     }
 }
