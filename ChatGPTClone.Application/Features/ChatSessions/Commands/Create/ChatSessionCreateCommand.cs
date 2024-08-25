@@ -1,4 +1,5 @@
-﻿using ChatGPTClone.Domain.Entities;
+﻿using ChatGPTClone.Application.Common.Models.General;
+using ChatGPTClone.Domain.Entities;
 using ChatGPTClone.Domain.Enums;
 using ChatGPTClone.Domain.ValueObjects;
 using MediatR;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace ChatGPTClone.Application.Features.ChatSessions.Commands.Create
 {
-    public class ChatSessionCreateCommand : IRequest<Guid>
+    public class ChatSessionCreateCommand : IRequest<ResponseDto<Guid>>
     {
         public string Content { get; set; }
         public GptModelType Model { get; set; }
