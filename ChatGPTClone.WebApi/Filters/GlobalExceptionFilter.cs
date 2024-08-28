@@ -40,6 +40,13 @@ namespace ChatGPTClone.WebApi.Filters
                     StatusCode=StatusCodes.Status400BadRequest
                 };
             }
+            else
+            {
+                context.Result = new ObjectResult(new ResponseDto<string>("Internal server error", false))
+                {
+                    StatusCode=StatusCodes.Status500InternalServerError
+                };
+            }
         }
     }
 }
