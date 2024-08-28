@@ -6,45 +6,44 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace ChatGPTClone.WebApi.Filters
 {
+
     public class GlobalExceptionFilter : IExceptionFilter
     {
         private readonly ILogger<GlobalExceptionFilter> _logger;
 
         public GlobalExceptionFilter(ILogger<GlobalExceptionFilter> logger)
         {
-           _logger = logger;
+            _logger = logger;
         }
 
         public void OnException(ExceptionContext context)
         {
-            _logger.LogError(context.Exception,context.Exception.Message);
+            _logger.LogError(context.Exception, context.Exception.Message);
+
             context.ExceptionHandled = true;
-            if (context.Exception is ValidationException)
+
+            // Eğer hata bir doğrulama hatası ise
+            if (context.Exception is ValidationException validationException)
             {
-                var exception = context.Exception as ValidationException;
-                var responseMessage = "One or more validation errors occurred.";
-                List<ErrorDto> errors = new();
-                var propertyNames = exception.Errors.Select(s => s.PropertyName).Distinct();
+                var responseMessage = "Bir veya daha fazla doğrulama hatası oluştu";
 
-                foreach (var propertyName in propertyNames)
-                {
-                    var messages = exception.Errors
-                        .Where(e => e.PropertyName == propertyName)
-                        .Select(e => e.ErrorMessage)
-                        .ToList();
-                    errors.Add(new ErrorDto(propertyName, messages));
-                }
+                var errors = validationException.Errors
+                    .GroupBy(e => e.PropertyName)
+                    .Select(g => new ErrorDto(g.Key, g.Select(e => e.ErrorMessage).ToList()))
+                    .ToList();
 
-                context.Result=new BadRequestObjectResult(new ResponseDto<string>(responseMessage, errors))
+                // 400 - Bad Request
+                context.Result = new BadRequestObjectResult(new ResponseDto<string>(responseMessage, errors))
                 {
-                    StatusCode=StatusCodes.Status400BadRequest
+                    StatusCode = StatusCodes.Status400BadRequest
                 };
             }
             else
             {
-                context.Result = new ObjectResult(new ResponseDto<string>("Internal server error", false))
+                // Diğer tüm hatalar için 500 - Internal Server Error
+                context.Result = new ObjectResult(new ResponseDto<string>("Sunucu tarafında bir hata oluştu", false))
                 {
-                    StatusCode=StatusCodes.Status500InternalServerError
+                    StatusCode = StatusCodes.Status500InternalServerError
                 };
             }
         }
