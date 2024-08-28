@@ -14,11 +14,11 @@ namespace ChatGPTClone.Infrastructure.Persistance.Seeder
     {
         public void Configure(EntityTypeBuilder<AppUser> builder)
         {
-            var initialUserId = "2798212b-3e5d-4556-8629-a64eb70da4a8";
+            var initialUserId = Guid.Parse("2798212b-3e5d-4556-8629-a64eb70da4a8");
 
             var initialUser = new AppUser
             {
-                Id = Guid.Parse(initialUserId),
+                Id = initialUserId,
                 UserName="umut",
                 NormalizedUserName="UMUT",
                 Email="umut@gmail.com",
