@@ -2,7 +2,7 @@ Yazılım Academy bootcamp'i ile geliştirdiğimiz projedir.
 
 Kullanılan Teknolojiler
 
-.NET Core 8.0
+.NET Core 8.0 <br>
 .Net Core Identity
 .Net Core Web API
 EntityFramework
