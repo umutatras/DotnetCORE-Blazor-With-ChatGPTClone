@@ -5,9 +5,9 @@ namespace ChatGPTClone.Application.Common.Behaviours
 {
     public class ValidationBehaviours<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
     {
-        private readonly IEnumerable<IValidator<TRequest>> _validators;
+        private readonly IValidator<TRequest>[] _validators;
 
-        public ValidationBehaviours(IEnumerable<IValidator<TRequest>> validators)
+        public ValidationBehaviours(IValidator<TRequest>[] validators)
         {
             _validators = validators;
         }

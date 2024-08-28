@@ -1,11 +1,15 @@
 using ChatGPTClone.Infrastructure;
 using ChatGPTClone.Application;
 using ChatGPTClone.WebApi;
+using ChatGPTClone.WebApi.Filters;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(opt =>
+{
+    opt.Filters.Add<GlobalExceptionFilter>();
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
