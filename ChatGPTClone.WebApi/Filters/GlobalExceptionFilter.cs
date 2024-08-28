@@ -25,7 +25,7 @@ namespace ChatGPTClone.WebApi.Filters
             // Eğer hata bir doğrulama hatası ise
             if (context.Exception is ValidationException validationException)
             {
-                var responseMessage = "Bir veya daha fazla doğrulama hatası oluştu";
+                var responseMessage = "One or more validation errors occurred.";
 
                 var errors = validationException.Errors
                     .GroupBy(e => e.PropertyName)
@@ -41,7 +41,7 @@ namespace ChatGPTClone.WebApi.Filters
             else
             {
                 // Diğer tüm hatalar için 500 - Internal Server Error
-                context.Result = new ObjectResult(new ResponseDto<string>("Sunucu tarafında bir hata oluştu", false))
+                context.Result = new ObjectResult(new ResponseDto<string>("Internal server error", false))
                 {
                     StatusCode = StatusCodes.Status500InternalServerError
                 };
