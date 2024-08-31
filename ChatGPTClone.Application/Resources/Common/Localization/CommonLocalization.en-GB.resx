@@ -103,4 +103,10 @@
   <data name="GeneralInternalServerException" xml:space="preserve">
     <value>An unexpected internal server error occurred.</value>
   </data>
+  <data name="ValidationIsRequired" xml:space="preserve">
+    <value>{0} is required</value>
+  </data>
+  <data name="ValidationIsInvalid" xml:space="preserve">
+    <value>{0} is invalid</value>
+  </data>
 </root>

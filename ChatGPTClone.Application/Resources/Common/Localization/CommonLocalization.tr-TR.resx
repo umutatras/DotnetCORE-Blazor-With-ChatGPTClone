@@ -103,4 +103,10 @@
   <data name="GeneralInternalServerException" xml:space="preserve">
     <value>Beklenmedik bir sunucu hatası ile karşılaşıldı.</value>
   </data>
+  <data name="ValidationIsRequired" xml:space="preserve">
+    <value>{0} alanı zorunludur.</value>
+  </data>
+  <data name="ValidationIsInvalid" xml:space="preserve">
+    <value>{0} alanı geçersizdir.</value>
+  </data>
 </root>
