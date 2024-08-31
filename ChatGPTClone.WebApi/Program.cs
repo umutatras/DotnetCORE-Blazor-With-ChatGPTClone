@@ -3,6 +3,7 @@ using ChatGPTClone.Application;
 using ChatGPTClone.WebApi;
 using ChatGPTClone.WebApi.Filters;
 using Serilog;
+using Microsoft.Extensions.Options;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -36,7 +37,8 @@ try
         app.UseSwagger();
         app.UseSwaggerUI();
     }
-
+    var requestLocalizationOptions=app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value;
+    app.UseRequestLocalization(requestLocalizationOptions);
     app.UseHttpsRedirection();
 
     app.UseAuthorization();
