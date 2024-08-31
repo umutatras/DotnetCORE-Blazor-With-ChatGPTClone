@@ -15,7 +15,7 @@ namespace ChatGPTClone.Application.Features.ChatSessions.Commands.Create
 
             RuleFor(x => x.Content)
                 .NotEmpty().WithMessage(x => localizer[CommonLocalizationKeys.ValidationIsRequired,nameof(x.Content)])
-                .Length(5, 4000).WithMessage("Content must be between 5 and 4000 characters.");
+                .Length(5, 4000).WithMessage(x => localizer[CommonLocalizationKeys.ValidationMustBeBetween, nameof(x.Content), 5, 4000]);
         }
     }
 }
