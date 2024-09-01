@@ -17,5 +17,9 @@ namespace ChatGPTClone.Application.Features.Auth.Commands.Login
         {
             return new IdentityLoginRequest(Email, Password);
         }
+        public IdentityAuthenticateRequest ToIdentityAuthenticateRequest()
+        {
+            return new IdentityAuthenticateRequest(Email, Password);
+        }
     }
 }

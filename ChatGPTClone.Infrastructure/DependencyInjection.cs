@@ -1,4 +1,5 @@
 ﻿using ChatGPTClone.Application.Common.Interfaces;
+using ChatGPTClone.Domain.Settings;
 using ChatGPTClone.Persistance.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -14,6 +15,7 @@ namespace ChatGPTClone.Infrastructure
 
             services.AddDbContext<ApplicationDbContext>(opt => opt.UseNpgsql(connectionString));
             services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
+            services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
             return services;
         }
     }

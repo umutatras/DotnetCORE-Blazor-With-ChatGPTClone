@@ -9,6 +9,7 @@ namespace ChatGPTClone.Application.Features.Auth.Commands.Login
         private readonly IIdentityService _identityService;
         public AuthLoginCommandValidator(IIdentityService identityService)
         {
+            _identityService = identityService;
             RuleFor(x => x.Email)
                 .NotEmpty()
                 .WithMessage("Email is required")
@@ -27,7 +28,7 @@ namespace ChatGPTClone.Application.Features.Auth.Commands.Login
         }
         private  Task<bool> BeValidUserAsync(AuthLoginCommand model,CancellationToken cancellationToken)
         {
-            var request=new IdentityAuthenticateRequest(model.Email,model.Password);
+            var request=model.ToIdentityAuthenticateRequest();
             return _identityService.AuthenticateAsync(request,cancellationToken);
         }
     }
