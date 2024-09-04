@@ -4,7 +4,7 @@ using MediatR;
 
 namespace ChatGPTClone.Application.Features.Auth.Commands.Register
 {
-    public class AuthRegisterCommand : IRequest<ResponseDto<string>>
+    public class AuthRegisterCommand : IRequest<ResponseDto<AuthRegisterDto>>
     {
         public string Email { get; set; }
         public string Password { get; set; }
