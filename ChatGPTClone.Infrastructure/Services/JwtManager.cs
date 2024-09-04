@@ -29,8 +29,8 @@ namespace ChatGPTClone.Infrastructure.Services
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iss, _jwtSettings.Issuer),
                 new Claim(JwtRegisteredClaimNames.Aud, _jwtSettings.Audience),
-                new Claim(JwtRegisteredClaimNames.Exp, expirationDate.ToFileTime().ToString()),
-                new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToFileTime().ToString()),
+                new Claim(JwtRegisteredClaimNames.Exp, expirationDate.ToFileTimeUtc().ToString()),
+                new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToFileTimeUtc().ToString()),
             }
             .Union(request.Roles.Select(role=>new Claim(ClaimTypes.Role,role)));
 
