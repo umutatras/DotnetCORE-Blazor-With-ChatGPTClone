@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Resend;
 
 namespace ChatGPTClone.Infrastructure
 {
@@ -34,6 +35,13 @@ namespace ChatGPTClone.Infrastructure
                 options.Password.RequiredUniqueChars = 0;
             }).AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
+            services.AddOptions();
+            services.AddHttpClient<ResendClient>();
+            services.Configure<ResendClientOptions>(o =>
+            {
+                o.ApiToken = Environment.GetEnvironmentVariable("RESEND_APITOKEN")!;
+            });
+            services.AddTransient<IResend, ResendClient>();
 
             return services;
         }
