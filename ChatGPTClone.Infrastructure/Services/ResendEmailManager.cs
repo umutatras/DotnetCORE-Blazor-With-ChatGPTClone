@@ -8,13 +8,15 @@ namespace ChatGPTClone.Infrastructure.Services
     public class ResendEmailManager : IEmailService
     {
         private readonly IResend _resend;
-      
-        private readonly string _emailTemplate=string.Empty;
+
+        private static string? _emailTemplate;
+
         public ResendEmailManager(IResend resend, IEnvironmentService environmentService)
         {
             _resend = resend;
-           
-            _emailTemplate = File.ReadAllText(Path.Combine(environmentService.WebRootPath, "email-templates", "email-verification-template.html"));
+
+            if (string.IsNullOrEmpty(_emailTemplate))
+                _emailTemplate = File.ReadAllText(Path.Combine(environmentService.WebRootPath, "email-templates", "email-verification-template.html"));
         }
 
         public  Task EmailVerificationAsync(EmailVerificationDto emailVerificationDto, CancellationToken cancellationToken)

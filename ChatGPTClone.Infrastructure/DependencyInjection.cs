@@ -23,6 +23,7 @@ namespace ChatGPTClone.Infrastructure
             ConfigureJwtSettings(services,configuration);
             services.AddScoped<IJwtService, JwtManager>();
             services.AddScoped<IIdentityService, IdentityManager>();
+            services.AddScoped<IEmailService, ResendEmailManager>();
             services.AddIdentity<AppUser, AppRole>(options =>
             {
                 options.User.RequireUniqueEmail = true;
