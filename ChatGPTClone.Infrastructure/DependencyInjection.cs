@@ -39,7 +39,7 @@ namespace ChatGPTClone.Infrastructure
             services.AddHttpClient<ResendClient>();
             services.Configure<ResendClientOptions>(o =>
             {
-                o.ApiToken = Environment.GetEnvironmentVariable("RESEND_APITOKEN")!;
+                o.ApiToken = configuration.GetSection("ResendApiKey").Value!;
             });
             services.AddTransient<IResend, ResendClient>();
 
