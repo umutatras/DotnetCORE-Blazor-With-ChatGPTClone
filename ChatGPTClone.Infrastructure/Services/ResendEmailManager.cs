@@ -26,6 +26,7 @@ namespace ChatGPTClone.Infrastructure.Services
             var emailTitle = "E-Posta Doğrulama İşlemi - ChatGPTClone";
 
             html = html.Replace("{{title}}", emailTitle);
+            html = html.Replace("{{greetings}}", "Merhaba Seni Aramızda Gördüğümüz İçin Mutluyuz.");
 
             html = html.Replace("{{message}}", "E-Posta doğrulama işleminizi tamamlamak için aşağıdaki linke tıklayınız.");
 
@@ -33,13 +34,13 @@ namespace ChatGPTClone.Infrastructure.Services
 
             var token = HttpUtility.UrlEncode(emailVerificationDto.Token);
 
-            var emailVerificationUrl = $"www.google.com.tr/verify-email?email={emailVerificationDto.Email}&token={token}";
+            var emailVerificationUrl = $"https://localhost:7103/verify-email?email={emailVerificationDto.Email}&token={token}";
 
             html = html.Replace("{{verifyButtonLink}}", emailVerificationUrl);
 
 
             var message = new EmailMessage();
-            message.From = "noreply@yazilim.academy";
+            message.From = "onboarding@resend.dev";
             message.To.Add(emailVerificationDto.Email);
             message.Subject = emailTitle;
             message.HtmlBody = html;
