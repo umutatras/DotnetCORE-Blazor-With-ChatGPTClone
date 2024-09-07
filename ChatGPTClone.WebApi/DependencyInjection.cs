@@ -12,7 +12,7 @@ namespace ChatGPTClone.WebApi
         {
             services.AddHttpContextAccessor();
             services.AddScoped<ICurrentUserService, CurrentUserManager>();
-            services.AddSingleton<IEnvironmentService,EnvironmentManager>(sp=>new EnvironmentManager(environment.WebRootPath));
+            services.AddTransient<IEnvironmentService,EnvironmentManager>(sp=>new EnvironmentManager(environment.WebRootPath));
 
             services.AddLocalization(options => options.ResourcesPath = "Resources");
 
