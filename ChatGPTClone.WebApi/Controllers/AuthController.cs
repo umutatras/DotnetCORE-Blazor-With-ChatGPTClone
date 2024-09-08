@@ -1,5 +1,6 @@
 ﻿using ChatGPTClone.Application.Features.Auth.Commands.Login;
 using ChatGPTClone.Application.Features.Auth.Commands.Register;
+using ChatGPTClone.Application.Features.Auth.Commands.VerifyEmail;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,12 +11,12 @@ namespace ChatGPTClone.WebApi.Controllers
     [ApiController]
     public class AuthController : ApiControllerBase
     {
-        public AuthController(ISender mediator):base(mediator)
+        public AuthController(ISender mediator) : base(mediator)
         {
-            
+
         }
         [HttpPost("Login")]
-        public async Task<IActionResult> Login(AuthLoginCommand command,CancellationToken cancellationToken)
+        public async Task<IActionResult> Login(AuthLoginCommand command, CancellationToken cancellationToken)
         {
             return Ok(await Mediatr.Send(command, cancellationToken));
         }
@@ -24,5 +25,8 @@ namespace ChatGPTClone.WebApi.Controllers
         {
             return Ok(await Mediatr.Send(command, cancellationToken));
         }
+        [HttpPost("verify-email")]
+        public async Task<IActionResult> VerifyEmail(AuthVerifyEmailCommand command, CancellationToken cancellationToken)
+      => Ok(await Mediatr.Send(command, cancellationToken));
     }
 }
