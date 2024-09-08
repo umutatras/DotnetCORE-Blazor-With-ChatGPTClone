@@ -6,6 +6,7 @@ using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Web;
 
 namespace ChatGPTClone.Infrastructure.Services
 {
@@ -99,7 +100,8 @@ namespace ChatGPTClone.Infrastructure.Services
         public async Task<IdentityVerifyEmailResponse> VerifyEmailAsync(IdentityVerifyEmailRequest request, CancellationToken cancellationToken)
         {
             var user=await _userManager.FindByEmailAsync(request.Email);
-            var result=await _userManager.ConfirmEmailAsync(user,request.Token);
+            var decodedToken=HttpUtility.UrlDecode(request.Token);
+            var result=await _userManager.ConfirmEmailAsync(user, decodedToken);
             if (!result.Succeeded)
                 CreateAndThrowValidationException(result.Errors);
 
