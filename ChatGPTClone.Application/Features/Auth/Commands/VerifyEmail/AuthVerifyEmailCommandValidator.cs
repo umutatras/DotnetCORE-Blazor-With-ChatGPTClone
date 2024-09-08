@@ -20,8 +20,10 @@ namespace ChatGPTClone.Application.Features.Auth.Commands.VerifyEmail
             .NotEmpty().EmailAddress()
             .MustAsync(EmailExists).WithMessage("Email not found.");
 
-            RuleFor(x => x.Token).NotEmpty();
-
+            RuleFor(x => x.Token)
+                 .NotEmpty()
+                 .MinimumLength(20)
+                 .WithMessage("Token is invalid.");
         }
 
         private Task<bool> EmailExists(string email, CancellationToken cancellationToken)
