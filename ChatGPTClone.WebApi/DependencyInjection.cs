@@ -11,11 +11,11 @@ namespace ChatGPTClone.WebApi
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddWebApi(this IServiceCollection services,IConfiguration configuration,IWebHostEnvironment environment)
+        public static IServiceCollection AddWebApi(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment environment)
         {
             services.AddHttpContextAccessor();
             services.AddScoped<ICurrentUserService, CurrentUserManager>();
-            services.AddTransient<IEnvironmentService,EnvironmentManager>(sp=>new EnvironmentManager(environment.WebRootPath));
+            services.AddTransient<IEnvironmentService, EnvironmentManager>(sp => new EnvironmentManager(environment.WebRootPath));
 
             services.AddLocalization(options => options.ResourcesPath = "Resources");
 
@@ -31,22 +31,31 @@ namespace ChatGPTClone.WebApi
                 options.SupportedUICultures = supportedCultures;
                 options.ApplyCurrentCultureToResponseHeaders = true;
             });
-            services.AddAuthentication(options => {
+            services.AddAuthentication(options =>
+            {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme= JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultSignOutScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultForbidScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-                .AddJwtBearer(options =>
+           .AddJwtBearer(options =>
                 {
+                    var secretKey = configuration["JwtSettings:SecretKey"];
+
+                    if (string.IsNullOrEmpty(secretKey))
+                        throw new ArgumentNullException("JwtSettings:SecretKey is not set.");
+
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuer=true,
-                        ValidateAudience=true,
-                        ValidateLifetime=true,
-                        ValidateIssuerSigningKey=true,
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
                         ValidIssuer = configuration["JwtSettings:Issuer"],
                         ValidAudience = configuration["JwtSettings:Audience"],
-                        IssuerSigningKey=new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:SecretKey"])),
-                        ClockSkew=TimeSpan.Zero
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
+                        ClockSkew = TimeSpan.Zero
                     };
                 });
             return services;

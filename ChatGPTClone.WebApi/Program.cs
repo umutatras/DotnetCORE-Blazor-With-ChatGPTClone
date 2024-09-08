@@ -41,6 +41,7 @@ try
     app.UseRequestLocalization(requestLocalizationOptions);
     app.UseHttpsRedirection();
 
+    app.UseAuthentication();
     app.UseAuthorization();
 
     app.MapControllers();
