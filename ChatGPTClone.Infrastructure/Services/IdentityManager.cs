@@ -44,6 +44,22 @@ namespace ChatGPTClone.Infrastructure.Services
             .AnyAsync(x => x.Email == email, cancellationToken);
         }
 
+        public Task<bool> CheckIfEmailVerifiedAsync(string email, CancellationToken cancellationToken)
+        {
+            return _userManager
+        .Users
+        .AnyAsync(x => x.Email == email && x.EmailConfirmed, cancellationToken);
+        }
+
+        public async Task<IdentityCreateEmailTokenResponse> CreateEmailTokenAsync(IdentityCreateEmailTokenRequest request, CancellationToken cancellation)
+        {
+            var user = await _userManager.FindByEmailAsync(request.Email);
+
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+            return new IdentityCreateEmailTokenResponse(token);
+        }
+
         // Kullanıcının giriş yapmasını sağlar.
         public async Task<IdentityLoginResponse> LoginAsync(IdentityLoginRequest request, CancellationToken cancellationToken)
         {

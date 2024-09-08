@@ -11,6 +11,8 @@ namespace ChatGPTClone.Application.Common.Interfaces
         Task<IdentityRegisterResponse> RegisterAsync(IdentityRegisterRequest request,CancellationToken cancellationToken);
 
         Task<IdentityVerifyEmailResponse> VerifyEmailAsync(IdentityVerifyEmailRequest request,CancellationToken cancellationToken);
+        Task<IdentityCreateEmailTokenResponse> CreateEmailTokenAsync(IdentityCreateEmailTokenRequest request, CancellationToken cancellation);
 
+        Task<bool> CheckIfEmailVerifiedAsync(string email, CancellationToken cancellationToken);
     }
 }

@@ -1,8 +1,11 @@
 ﻿using ChatGPTClone.Application.Common.Interfaces;
 using ChatGPTClone.WebApi.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Globalization;
+using System.Text;
 
 namespace ChatGPTClone.WebApi
 {
@@ -28,6 +31,24 @@ namespace ChatGPTClone.WebApi
                 options.SupportedUICultures = supportedCultures;
                 options.ApplyCurrentCultureToResponseHeaders = true;
             });
+            services.AddAuthentication(options => {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme= JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer=true,
+                        ValidateAudience=true,
+                        ValidateLifetime=true,
+                        ValidateIssuerSigningKey=true,
+                        ValidIssuer = configuration["JwtSettings:Issuer"],
+                        ValidAudience = configuration["JwtSettings:Audience"],
+                        IssuerSigningKey=new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:SecretKey"])),
+                        ClockSkew=TimeSpan.Zero
+                    };
+                });
             return services;
         }
     }

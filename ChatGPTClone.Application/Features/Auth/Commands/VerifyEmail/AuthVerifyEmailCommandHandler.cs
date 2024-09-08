@@ -17,7 +17,8 @@ namespace ChatGPTClone.Application.Features.Auth.Commands.VerifyEmail
         public async Task<ResponseDto<string>> Handle(AuthVerifyEmailCommand request, CancellationToken cancellationToken)
         {
             var response = await _identityService.VerifyEmailAsync(new IdentityVerifyEmailRequest(request.Email, request.Token), cancellationToken);
-            return new ResponseDto<string>("Email verified successfully", response.Email);
+
+            return new ResponseDto<string>(data: response.Email, message: "Email verified successfully.");
         }
     }
 }
