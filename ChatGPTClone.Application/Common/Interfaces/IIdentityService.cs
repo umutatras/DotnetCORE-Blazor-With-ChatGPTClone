@@ -10,5 +10,7 @@ namespace ChatGPTClone.Application.Common.Interfaces
         Task<bool> CheckEmailExistsAsync(string email,CancellationToken cancellationToken);
         Task<IdentityRegisterResponse> RegisterAsync(IdentityRegisterRequest request,CancellationToken cancellationToken);
 
+        Task<IdentityVerifyEmailResponse> VerifyEmailAsync(IdentityVerifyEmailRequest request,CancellationToken cancellationToken);
+
     }
 }

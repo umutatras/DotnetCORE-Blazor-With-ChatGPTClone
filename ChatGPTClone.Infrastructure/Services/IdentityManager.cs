@@ -96,6 +96,16 @@ namespace ChatGPTClone.Infrastructure.Services
             return new IdentityRegisterResponse(userId,user.Email, emailToken);
         }
 
+        public async Task<IdentityVerifyEmailResponse> VerifyEmailAsync(IdentityVerifyEmailRequest request, CancellationToken cancellationToken)
+        {
+            var user=await _userManager.FindByEmailAsync(request.Email);
+            var result=await _userManager.ConfirmEmailAsync(user,request.Token);
+            if (!result.Succeeded)
+                CreateAndThrowValidationException(result.Errors);
+
+            return new IdentityVerifyEmailResponse(user.Email);
+        }
+
         // Doğrulama hatası oluşturur ve fırlatır.
         private void CreateAndThrowValidationException(IEnumerable<IdentityError> errors)
         {
