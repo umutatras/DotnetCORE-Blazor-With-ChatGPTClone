@@ -9,9 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatGPTClone.WasmClient", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatGPTClone.Domain", "ChatGPTClone.Domain\ChatGPTClone.Domain.csproj", "{91998F01-111E-4E97-B1B5-645A9995ACE2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatGPTClone.Application", "ChatGPTClone.Application\ChatGPTClone.Application.csproj", "{2D209E9D-1903-4F4B-8FD4-1BAC2B19CC7A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatGPTClone.Application", "ChatGPTClone.Application\ChatGPTClone.Application.csproj", "{2D209E9D-1903-4F4B-8FD4-1BAC2B19CC7A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatGPTClone.Infrastructure", "ChatGPTClone.Infrastructure\ChatGPTClone.Infrastructure.csproj", "{BBA3B00A-8806-434F-BCF6-BDEA27A78482}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatGPTClone.Infrastructure", "ChatGPTClone.Infrastructure\ChatGPTClone.Infrastructure.csproj", "{BBA3B00A-8806-434F-BCF6-BDEA27A78482}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
