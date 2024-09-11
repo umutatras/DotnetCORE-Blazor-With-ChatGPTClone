@@ -43,7 +43,7 @@ namespace ChatGPTClone.Infrastructure
                 o.ApiToken = configuration.GetSection("ResendApiKey").Value!;
             });
             services.AddTransient<IResend, ResendClient>();
-
+      
             return services;
         }
        // JWT ayarlarını yapılandıran özel metod
