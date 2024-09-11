@@ -34,7 +34,7 @@ namespace ChatGPTClone.Infrastructure.Services
 
             var token = HttpUtility.UrlEncode(emailVerificationDto.Token);
 
-            var emailVerificationUrl = $"https://localhost:7103/verify-email?email={emailVerificationDto.Email}&token={token}";
+            var emailVerificationUrl = $"http://localhost:5274/auth/verify-email?email={emailVerificationDto.Email}&token={token}";
 
             html = html.Replace("{{verifyButtonLink}}", emailVerificationUrl);
 

@@ -1,6 +1,33 @@
 ﻿@page "/auth/verify-email"
-<h3>VerifyEmailPage</h3>
 
+
+@if (isLoading)
+{
+    <h1>loading</h1>
+}
+else
+{
+    <h2>loading</h2>
+}
 @code {
+    [Parameter, SupplyParameterFromQuery(Name = "email")]
+    public string Email { get; set; }
 
+    [Parameter, SupplyParameterFromQuery(Name = "token")]
+    public string Token { get; set; }
+
+    private bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+
+    protected class FormModel
+    {
+        [System.ComponentModel.DataAnnotations.Required]
+        public string Email { get; set; }
+        [System.ComponentModel.DataAnnotations.Required]
+        public string Token { get; set; }
+    }
 }
