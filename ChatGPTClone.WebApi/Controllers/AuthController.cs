@@ -8,8 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ChatGPTClone.WebApi.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+ 
     public class AuthController : ApiControllerBase
     {
         public AuthController(ISender mediator) : base(mediator)
