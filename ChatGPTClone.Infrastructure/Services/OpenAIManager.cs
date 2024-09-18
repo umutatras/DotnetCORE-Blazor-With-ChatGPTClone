@@ -31,6 +31,7 @@ namespace ChatGPTClone.Infrastructure.Services
             {
                 Messages = allMessages,
                 Model = GetChatGPTModel(request.Model),
+                MaxTokens=4096
             });
             if (!completionResult.Successful)
             {
