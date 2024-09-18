@@ -15,8 +15,11 @@ namespace ChatGPTClone.Application.Features.ChatSessions.Queries.GetById
 
         public async Task<ChatSessionGetByIdDto> Handle(ChatSessinGetByIdQuery request, CancellationToken cancellationToken)
         {
-            var chatSession = await _context.ChatSessions.AsNoTracking().Select(s => ChatSessionGetByIdDto.MapFromChatSession(s)).FirstOrDefaultAsync(f => f.Id == request.Id);
-            return chatSession;
+            var chatSession = await _context.ChatSessions
+                  .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
+
+            return ChatSessionGetByIdDto.MapFromChatSession(chatSession);
 
 
         }
