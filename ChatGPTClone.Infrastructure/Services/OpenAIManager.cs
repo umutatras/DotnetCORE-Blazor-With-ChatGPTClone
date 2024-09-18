@@ -1,19 +1,17 @@
 ﻿using ChatGPTClone.Application.Common.Interfaces;
 using ChatGPTClone.Application.Common.Models.OpenAI;
 using OpenAI.Interfaces;
-using OpenAI.Managers;
 using OpenAI.ObjectModels.RequestModels;
 using OpenAI.ObjectModels;
-using System.Globalization;
 using ChatGPTClone.Domain.Enums;
 
 namespace ChatGPTClone.Infrastructure.Services
 {
-    public class OpenAIManager : IOpenAiService
+    public class OpenAiManager : IOpenAiService
     {
         private readonly IOpenAIService _openAIService;
         private readonly ICurrentUserService _currentUserService;
-        public OpenAIManager(IOpenAIService openAIService, ICurrentUserService currentUserService)
+        public OpenAiManager(IOpenAIService openAIService, ICurrentUserService currentUserService)
         {
             _openAIService = openAIService;
             _currentUserService = currentUserService;
