@@ -80,14 +80,14 @@ namespace ChatGPTClone.WebApi
                         Description = "Through this API you can access ChatGPTClone App's details",
                         Contact = new OpenApiContact()
                         {
-                            Email = "alper.tunga@yazilim.academy",
-                            Name = "Alper Tunga",
-                            Url = new Uri("https://yazilim.academy/")
+                            Email = "umutatras@gmail.com",
+                            Name = "Umut ATRAŞ",
+                            Url = new Uri("https://www.linkedin.com/in/umut-atras/")
                         },
                        License = new OpenApiLicense()
                         {
-                            Name = "© 2024 Yazılım Academy Tüm Hakları Saklıdır",
-                            Url = new Uri("https://yazilim.academy/")
+                            Name = "© 2024 UA Tüm Hakları Saklıdır",
+                            Url = new Uri("https://www.linkedin.com/in/umut-atras/")
                         }
                     });
 
