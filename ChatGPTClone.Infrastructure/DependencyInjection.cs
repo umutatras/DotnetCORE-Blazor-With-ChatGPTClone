@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using OpenAI.Extensions;
 using Resend;
 
 namespace ChatGPTClone.Infrastructure
@@ -23,7 +24,7 @@ namespace ChatGPTClone.Infrastructure
 
             // IApplicationDbContext'i ApplicationDbContext ile eşler
             services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
-
+            services.AddOpenAIService(settings => settings.ApiKey = configuration.GetSection("OpenAiApiKey").Value!);
             // JWT ayarlarını yapılandırır
             services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
 
