@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ChatGPTClone.WebApi.Controllers
 {
+    [Authorize]
 
     public class ChatSessionsController : ApiControllerBase
     {
@@ -19,14 +20,12 @@ namespace ChatGPTClone.WebApi.Controllers
         {
             return Ok(await Mediatr.Send(new ChatSessionGetAllQuery(), cancellationToken));
         }
-        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByIdAsyncc(Guid id, CancellationToken cancellationToken)
         {
             return Ok(await Mediatr.Send(new ChatSessinGetByIdQuery(id), cancellationToken));
 
         }
-        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateAsync(ChatSessionCreateCommand command, CancellationToken cancellationToken)
         {
