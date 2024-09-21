@@ -42,14 +42,22 @@ namespace ChatGPTClone.Application.Features.ChatMessages.Commands
         }
 
 
-        private Task<bool> IsChatThreadExistsAsync(ChatMessageCreateCommand command, CancellationToken cancellationToken)
+        private async Task<bool> IsChatThreadExistsAsync(ChatMessageCreateCommand command, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(command.ThreadId))
-                return Task.FromResult(true);
+                return true;
 
-            return _context.ChatSessions.AnyAsync(x => x.Id == command.ChatSessionId && x.Threads.Any(t => t.Id == command.ThreadId), cancellationToken);
+
+            var chatSession = await _context
+            .ChatSessions
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == command.ChatSessionId, cancellationToken);
+
+            if (chatSession is null)
+                return false;
+
+            return chatSession.Threads.Any(x => x.Id == command.ThreadId);
         }
-
 
 
         private Task<bool> IsChatSessionExistsAsync(Guid chatSessionId, CancellationToken cancellationToken)
