@@ -2,6 +2,7 @@
 using ChatGPTClone.Application.Common.Models.General;
 using ChatGPTClone.Application.Features.ChatSessions.Queries.GetAll;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace ChatGPTClone.Application.Features.ChatSessions.Commands.Remove
@@ -27,7 +28,7 @@ namespace ChatGPTClone.Application.Features.ChatSessions.Commands.Remove
 
         public async Task<ResponseDto<Guid>> Handle(ChatSessionRemoveCommand request, CancellationToken cancellationToken)
         {
-            var chatSession = await _dbContext.ChatSessions.FindAsync(request.Id);
+            var chatSession = await _dbContext.ChatSessions.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
             _dbContext.ChatSessions.Remove(chatSession);
 
