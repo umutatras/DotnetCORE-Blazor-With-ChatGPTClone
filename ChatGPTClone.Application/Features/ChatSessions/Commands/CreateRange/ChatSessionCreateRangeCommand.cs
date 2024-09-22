@@ -25,7 +25,7 @@ namespace ChatGPTClone.Application.Features.ChatSessions.Commands.CreateRange
                     Model = Model,
                     AppUserId = appUserId,
                     CreatedOn = DateTime.UtcNow,
-                    Title = Content.Substring(0, 50),
+                    Title = Content.Length>=50?Content.Substring(0, 50):Content,
                     Threads = new List<ChatThread>(){
                 new ChatThread
                 {
