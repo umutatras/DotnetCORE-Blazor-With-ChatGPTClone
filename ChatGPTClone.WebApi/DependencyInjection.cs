@@ -14,6 +14,7 @@ namespace ChatGPTClone.WebApi
     {
         public static IServiceCollection AddWebApi(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment environment)
         {
+            services.AddMemoryCache();
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowAll",

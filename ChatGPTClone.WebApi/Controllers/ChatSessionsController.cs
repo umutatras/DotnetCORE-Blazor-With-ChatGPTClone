@@ -1,4 +1,5 @@
 ﻿using ChatGPTClone.Application.Features.ChatSessions.Commands.Create;
+using ChatGPTClone.Application.Features.ChatSessions.Commands.CreateRange;
 using ChatGPTClone.Application.Features.ChatSessions.Queries.GetAll;
 using ChatGPTClone.Application.Features.ChatSessions.Queries.GetById;
 using MediatR;
@@ -30,6 +31,11 @@ namespace ChatGPTClone.WebApi.Controllers
         public async Task<IActionResult> CreateAsync(ChatSessionCreateCommand command, CancellationToken cancellationToken)
         {
             return Ok(await Mediatr.Send(command, cancellationToken));  
+        }
+        [HttpPost("range")]
+        public async Task<IActionResult> CreateRangeAsync(ChatSessionCreateRangeCommand command, CancellationToken cancellationToken)
+        {
+            return Ok(await Mediatr.Send(command, cancellationToken));
         }
     }
 }
