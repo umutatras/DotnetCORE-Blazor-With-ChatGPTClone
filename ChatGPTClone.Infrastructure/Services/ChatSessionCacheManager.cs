@@ -30,7 +30,9 @@ namespace ChatGPTClone.Infrastructure.Services
 
         public async Task<List<ChatSessionGetAllDto>> GetAllAsync(CancellationToken cancellationToken)
         {
-            return await _memoryCache.GetOrCreateAsync(GetAllKey, async entry =>
+            var cacheKey = $"{GetAllKey}{_currentUserService.UserId}";
+
+            return await _memoryCache.GetOrCreateAsync(cacheKey, async entry =>
             {
 
                 var chatSessions = await _context.ChatSessions
