@@ -36,6 +36,8 @@ namespace ChatGPTClone.Infrastructure
 
             services.AddScoped<IOpenAiService, OpenAiManager>();
 
+            services.AddScoped<IChatSessionCacheService, ChatSessionCacheManager>();
+
             services.AddIdentity<AppUser, AppRole>(options =>
             {
                 options.User.RequireUniqueEmail = true;
