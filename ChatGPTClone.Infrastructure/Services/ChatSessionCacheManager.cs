@@ -81,5 +81,23 @@ namespace ChatGPTClone.Infrastructure.Services
                 _memoryCache.Set(cacheKeyGetAll, cachedResult, _cacheOptions);
             }
         }
+
+        public async Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken)
+        {
+            var cacheKey = $"{GetByIdKey}{id}";
+
+            if (_memoryCache.TryGetValue(cacheKey, out ChatSessionGetByIdDto cachedResult))
+
+            {
+                if(cachedResult.AppUserId==_currentUserService.UserId)
+                    return true;
+
+                return false;
+            }
+
+            return await _context.ChatSessions
+                .AnyAsync(x=>x.AppUserId==_currentUserService.UserId&&x.Id==id, cancellationToken);
+           
+        }
     }
 }

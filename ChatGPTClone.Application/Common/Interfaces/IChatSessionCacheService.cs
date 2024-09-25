@@ -10,5 +10,7 @@ namespace ChatGPTClone.Application.Common.Interfaces
         Task<ChatSessionGetByIdDto>GetByIdAsync(Guid id,CancellationToken token);
 
         void Remove(Guid id);   
+
+        Task<bool> ExistsAsync(Guid id,CancellationToken cancellationToken);
     }
 }
