@@ -31,6 +31,7 @@ namespace ChatGPTClone.Infrastructure.Services
                 new Claim(JwtRegisteredClaimNames.Aud, _jwtSettings.Audience),
                 new Claim(JwtRegisteredClaimNames.Exp, expirationDate.ToFileTimeUtc().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToFileTimeUtc().ToString()),
+                new Claim(ClaimTypes.Role,"Admin")
             }
             .Union(request.Roles.Select(role=>new Claim(ClaimTypes.Role,role)));
 
