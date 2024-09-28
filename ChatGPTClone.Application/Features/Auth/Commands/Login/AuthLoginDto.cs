@@ -11,6 +11,10 @@ namespace ChatGPTClone.Application.Features.Auth.Commands.Login
             Token = token;
             ExpiresAt = expiresAt;
         }
+        public AuthLoginDto()
+        {
+            
+        }
         public static AuthLoginDto FromIdentityLoginResponse(IdentityLoginResponse response)
         {
             return new AuthLoginDto(response.Token, response.ExpiresAt);
