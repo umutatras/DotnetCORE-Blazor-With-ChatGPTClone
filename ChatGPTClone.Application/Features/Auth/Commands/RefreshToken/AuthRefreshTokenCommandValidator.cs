@@ -8,12 +8,13 @@ namespace ChatGPTClone.Application.Features.Auth.Commands.RefreshToken
     {
         private readonly IApplicationDbContext _context;
         private readonly IJwtService _jwtService;
+        private readonly IIdentityService _identityService;
 
-        public AuthRefreshTokenCommandValidator(IApplicationDbContext context, IJwtService jwtService)
+        public AuthRefreshTokenCommandValidator(IApplicationDbContext context, IJwtService jwtService, IIdentityService identityService)
         {
             _context = context;
             _jwtService = jwtService;
-
+            _identityService = identityService;
             RuleFor(x => x.AccessToken)
                 .NotEmpty()
                 .WithMessage("AccessToken is required")
@@ -31,10 +32,6 @@ namespace ChatGPTClone.Application.Features.Auth.Commands.RefreshToken
             RuleFor(x => x.RefreshToken)
                 .MustAsync((command, refreshToken, cancellationToken) => IsRefreshTokenValidAsync(command.AccessToken, refreshToken, cancellationToken))
                 .WithMessage("RefreshToken is invalid");
-
-            RuleFor(x => x.AccessToken)
-                .MustAsync((command, refreshToken, cancellationToken) => IsRefreshTokenValidAsync(command.AccessToken, refreshToken, cancellationToken))
-                .WithMessage("RefreshToken is invalid");
         }
 
         private Task<bool> IsRefreshTokenValidAsync(string accessToken, string refreshToken, CancellationToken cancellationToken)
@@ -43,5 +40,6 @@ namespace ChatGPTClone.Application.Features.Auth.Commands.RefreshToken
 
             return _context.RefreshTokens.AnyAsync(x => x.AppUserId == userId && x.Token == refreshToken, cancellationToken);
         }
+
     }
 }
