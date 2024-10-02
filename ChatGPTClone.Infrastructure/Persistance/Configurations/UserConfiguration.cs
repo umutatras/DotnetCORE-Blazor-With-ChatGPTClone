@@ -56,6 +56,10 @@ public class UserConfiguration : IEntityTypeConfiguration<AppUser>
             .WithOne()
             .HasForeignKey(x => x.AppUserId);
 
+        builder.HasMany<RefreshToken>()
+          .WithOne()
+          .HasForeignKey(x => x.AppUserId);
+
         // Common Properties
 
         // CreatedDate

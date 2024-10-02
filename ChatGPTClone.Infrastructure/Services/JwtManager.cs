@@ -4,6 +4,7 @@ using ChatGPTClone.Domain.Settings;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Authentication;
 using System.Security.Claims;
 using System.Text;
 
@@ -47,6 +48,40 @@ namespace ChatGPTClone.Infrastructure.Services
             return new JwtGenerateTokenResponse(token, expirationDate);
         }
 
+        public Guid GetUserIdFromJwt(string token)
+        {
+            try
+            {
+                var claims=ParseClaimsFromJwt(token);
+                var userId = claims.FirstOrDefault(c => c.Type == "uid").Value;
+                if (string.IsNullOrEmpty(userId))
+                    throw new AuthenticationException("Invalid Token");
+                return new Guid(userId);
+            }
+            catch (Exception ex) 
+            {
+
+                throw new AuthenticationException("Invalid toke",ex);
+            }
+        }
+        private  IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
+        {
+            var payload = jwt.Split('.')[1];
+            var jsonBytes = ParseBase64WithoutPadding(payload);
+            var keyValuePairs = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, object>>(jsonBytes);
+
+            return keyValuePairs.Select(kvp => new Claim(kvp.Key, kvp.Value.ToString()));
+        }
+
+        private  byte[] ParseBase64WithoutPadding(string base64)
+        {
+            switch (base64.Length % 4)
+            {
+                case 2: base64 += "=="; break;
+                case 3: base64 += "="; break;
+            }
+            return Convert.FromBase64String(base64);
+        }
         public bool ValidateToken(string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
