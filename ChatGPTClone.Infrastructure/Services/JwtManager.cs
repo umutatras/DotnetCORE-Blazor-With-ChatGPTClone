@@ -46,5 +46,10 @@ namespace ChatGPTClone.Infrastructure.Services
             var token =new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
             return new JwtGenerateTokenResponse(token, expirationDate);
         }
+
+        public bool ValidateToken(string token)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

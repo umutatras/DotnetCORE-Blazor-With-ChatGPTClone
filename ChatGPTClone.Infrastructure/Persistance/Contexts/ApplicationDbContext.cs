@@ -9,7 +9,7 @@ namespace ChatGPTClone.Persistance.Contexts
     public class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, Guid, AppUserClaim, AppUserRole, AppUserLogin, AppRoleClaim, AppUserToken>, IApplicationDbContext
     {
         public DbSet<ChatSession> ChatSessions { get; set; }
-
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
 
