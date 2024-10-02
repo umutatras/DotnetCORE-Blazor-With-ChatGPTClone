@@ -2,13 +2,14 @@
 <CascadingAuthenticationState>
     <Router AppAssembly="@typeof(App).Assembly">
         <Found Context="routeData">
-            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" >
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
                 <Authorizing>
                     <p>Giriş yapılıyor...</p>
                 </Authorizing>
 
                 <NotAuthorized>
-                    <p> Bu sayfayi gormek icin yetkiniz yoktur.. </p>                </NotAuthorized>
+                    <p> Bu sayfayi gormek icin yetkiniz yoktur.. </p>
+                </NotAuthorized>
             </AuthorizeRouteView>
             <FocusOnNavigate RouteData="@routeData" Selector="h1" />
         </Found>
