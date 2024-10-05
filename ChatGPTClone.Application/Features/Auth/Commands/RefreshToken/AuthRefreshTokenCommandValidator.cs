@@ -34,11 +34,20 @@ namespace ChatGPTClone.Application.Features.Auth.Commands.RefreshToken
                 .WithMessage("RefreshToken is invalid");
         }
 
-        private Task<bool> IsRefreshTokenValidAsync(string accessToken, string refreshToken, CancellationToken cancellationToken)
+        private async Task<bool> IsRefreshTokenValidAsync(string accessToken, string refreshToken, CancellationToken cancellationToken)
         {
             var userId = _jwtService.GetUserIdFromJwt(accessToken);
 
-            return _context.RefreshTokens.AnyAsync(x => x.AppUserId == userId && x.Token == refreshToken, cancellationToken);
+            var refreshTokenEntity = await _context.RefreshTokens.FirstOrDefaultAsync(x => x.AppUserId == userId && x.Token == refreshToken, cancellationToken);
+
+            if (refreshTokenEntity is null || refreshTokenEntity.Expires < DateTime.UtcNow || refreshTokenEntity.Revoked.HasValue)
+            {
+                return false;
+            }
+            if (!await _identityService.CheckSecurityStampAsync(userId, refreshTokenEntity.SecurityStamp, cancellationToken))
+                return false;
+
+            return true;
         }
 
     }

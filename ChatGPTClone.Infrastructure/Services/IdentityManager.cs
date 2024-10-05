@@ -85,6 +85,25 @@ namespace ChatGPTClone.Infrastructure.Services
             return new IdentityLoginResponse(jwtResponse.Token, jwtResponse.ExpiresAt);
         }
 
+        public async Task<IdentityRefreshTokenResponse> RefreshTokenAsync(IdentityRefreshTokenRequest request, CancellationToken cancellationToken)
+        {
+            var userId=_jwtService.GetUserIdFromJwt(request.AccessToken);
+            // Kullanıcıyı e-posta adresine göre bul.
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+
+            // Kullanıcının rollerini al.
+            var roles = await _userManager.GetRolesAsync(user);
+
+            // JWT oluşturma isteği oluştur.
+            var jwtRequest = new JwtGenerateTokenRequest(user.Id, user.Email, roles);
+
+            // JWT oluştur.
+            var jwtResponse = _jwtService.GenerateToken(jwtRequest);
+
+            // Giriş yanıtını döndür.
+            return new IdentityRefreshTokenResponse(jwtResponse.Token, jwtResponse.ExpiresAt);
+        }
+
         // Yeni bir kullanıcı kaydeder.
         public async Task<IdentityRegisterResponse> RegisterAsync(IdentityRegisterRequest request, CancellationToken cancellationToken)
         {
