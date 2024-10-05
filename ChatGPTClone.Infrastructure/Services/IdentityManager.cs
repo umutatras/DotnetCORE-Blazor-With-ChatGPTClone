@@ -17,17 +17,18 @@ namespace ChatGPTClone.Infrastructure.Services
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly IJwtService _jwtService;
-        private readonly IApplicationDbContext _context;
         private readonly JwtSettings _jwtSettings;
+        private readonly IApplicationDbContext _context;
         private readonly ICurrentUserService _currentUserService;
-        public IdentityManager(IJwtService jwtService, UserManager<AppUser> userManager, IApplicationDbContext applicationDbContext, ICurrentUserService currentUserService, IOptions<JwtSettings> jwtSettings)
+
+        public IdentityManager(UserManager<AppUser> userManager, IJwtService jwtService, IOptions<JwtSettings> jwtSettings, IApplicationDbContext context, ICurrentUserService currentUserService)
         {
-            _jwtService = jwtService;
             _userManager = userManager;
-            _context = applicationDbContext;
+            _jwtService = jwtService;
+            _context = context;
+            _jwtSettings = jwtSettings.Value;
             _currentUserService = currentUserService;
         }
-
         // Kullanıcının kimliğini doğrular.
         public async Task<bool> AuthenticateAsync(IdentityAuthenticateRequest request, CancellationToken cancellationToken)
         {
