@@ -19,7 +19,8 @@ public class HttpClientAuthDelegator:DelegatingHandler
 
         if (authLoginDto is not null && !string.IsNullOrEmpty(authLoginDto.Token))
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authLoginDto.Token);
-
-        return await base.SendAsync(request, cancellationToken);
+       return  await base.SendAsync(request, cancellationToken);
+        //var response= await base.SendAsync(request, cancellationToken);
+        //return response;
     }
 }
