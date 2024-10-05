@@ -1,11 +1,14 @@
 ﻿using ChatGPTClone.Application.Common.Interfaces;
 using ChatGPTClone.Application.Common.Models.Identity;
 using ChatGPTClone.Application.Common.Models.Jwt;
+using ChatGPTClone.Domain.Entities;
+using ChatGPTClone.Domain.Settings;
 using ChatGPTClone.Infrastructure.Identity;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using System.Web;
 
 namespace ChatGPTClone.Infrastructure.Services
@@ -14,11 +17,15 @@ namespace ChatGPTClone.Infrastructure.Services
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly IJwtService _jwtService;
-
-        public IdentityManager(IJwtService jwtService, UserManager<AppUser> userManager)
+        private readonly IApplicationDbContext _context;
+        private readonly JwtSettings _jwtSettings;
+        private readonly ICurrentUserService _currentUserService;
+        public IdentityManager(IJwtService jwtService, UserManager<AppUser> userManager, IApplicationDbContext applicationDbContext, ICurrentUserService currentUserService, IOptions<JwtSettings> jwtSettings)
         {
             _jwtService = jwtService;
             _userManager = userManager;
+            _context = applicationDbContext;
+            _currentUserService = currentUserService;
         }
 
         // Kullanıcının kimliğini doğrular.
@@ -34,8 +41,6 @@ namespace ChatGPTClone.Infrastructure.Services
             return await _userManager.CheckPasswordAsync(user, request.Password);
         }
 
-      
-
         // E-posta adresinin veritabanında olup olmadığını kontrol eder.
         public Task<bool> CheckEmailExistsAsync(string email, CancellationToken cancellationToken)
         {
@@ -47,17 +52,18 @@ namespace ChatGPTClone.Infrastructure.Services
         public Task<bool> CheckIfEmailVerifiedAsync(string email, CancellationToken cancellationToken)
         {
             return _userManager
-        .Users
-        .AnyAsync(x => x.Email == email && x.EmailConfirmed, cancellationToken);
+            .Users
+            .AnyAsync(x => x.Email == email && x.EmailConfirmed, cancellationToken);
         }
 
         public async Task<bool> CheckSecurityStampAsync(Guid userId, string securityStamp, CancellationToken cancellationToken)
         {
-            var user=await _userManager.FindByIdAsync(userId.ToString());
-            return string.Equals(securityStamp,user?.SecurityStamp);
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+
+            return string.Equals(securityStamp, user.SecurityStamp);
         }
 
-        public async Task<IdentityCreateEmailTokenResponse> CreateEmailTokenAsync(IdentityCreateEmailTokenRequest request, CancellationToken cancellation)
+        public async Task<IdentityCreateEmailTokenResponse> CreateEmailTokenAsync(IdentityCreateEmailTokenRequest request, CancellationToken cancellationToken)
         {
             var user = await _userManager.FindByEmailAsync(request.Email);
 
@@ -81,15 +87,19 @@ namespace ChatGPTClone.Infrastructure.Services
             // JWT oluştur.
             var jwtResponse = _jwtService.GenerateToken(jwtRequest);
 
+            var refreshToken = await CreateRefreshTokenAsync(user, cancellationToken);
             // Giriş yanıtını döndür.
-            return new IdentityLoginResponse(jwtResponse.Token, jwtResponse.ExpiresAt);
+            return new IdentityLoginResponse(jwtResponse.Token, jwtResponse.ExpiresAt, refreshToken.Token, refreshToken.Expires);
         }
 
         public async Task<IdentityRefreshTokenResponse> RefreshTokenAsync(IdentityRefreshTokenRequest request, CancellationToken cancellationToken)
         {
-            var userId=_jwtService.GetUserIdFromJwt(request.AccessToken);
-            // Kullanıcıyı e-posta adresine göre bul.
+            var userId = _jwtService.GetUserIdFromJwt(request.AccessToken);
+
+            // Kullanıcıyı ID'sine göre bul.
             var user = await _userManager.FindByIdAsync(userId.ToString());
+
+            // _collection.FindOne
 
             // Kullanıcının rollerini al.
             var roles = await _userManager.GetRolesAsync(user);
@@ -135,18 +145,21 @@ namespace ChatGPTClone.Infrastructure.Services
             var emailToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
             // Kayıt yanıtını döndür.
-            return new IdentityRegisterResponse(userId,user.Email, emailToken);
+            return new IdentityRegisterResponse(userId, user.Email, emailToken);
         }
 
         public async Task<IdentityVerifyEmailResponse> VerifyEmailAsync(IdentityVerifyEmailRequest request, CancellationToken cancellationToken)
         {
-            var user=await _userManager.FindByEmailAsync(request.Email);
-            //var decodedToken=HttpUtility.UrlDecode(request.Token);
-            var result=await _userManager.ConfirmEmailAsync(user,request.Token);
+            var user = await _userManager.FindByEmailAsync(request.Email);
+
+            // var decodedToken = HttpUtility.UrlDecode(request.Token);
+
+            var result = await _userManager.ConfirmEmailAsync(user, request.Token);
+
             if (!result.Succeeded)
                 CreateAndThrowValidationException(result.Errors);
 
-            return new IdentityVerifyEmailResponse(user.Email!);
+            return new IdentityVerifyEmailResponse(user.Email);
         }
 
         // Doğrulama hatası oluşturur ve fırlatır.
@@ -159,6 +172,26 @@ namespace ChatGPTClone.Infrastructure.Services
 
             // Doğrulama hatasını fırlat.
             throw new ValidationException(errorMessages);
+        }
+
+        private async Task<RefreshToken> CreateRefreshTokenAsync(AppUser user, CancellationToken cancellationToken)
+        {
+            var refreshToken = new RefreshToken
+            {
+                CreatedByUserId = user.Id.ToString(),
+                CreatedOn = DateTimeOffset.UtcNow,
+                AppUserId = user.Id,
+                Token = Ulid.NewUlid().ToString(), // Rastegele token oluştur.
+                Expires = DateTime.UtcNow.Add(_jwtSettings.RefreshTokenExpiration), // Refresh tokenın süresini belirler.
+                SecurityStamp = user.SecurityStamp, // Kullanıcının güvenlik damgasını kullanır.
+                CreatedByIp = _currentUserService.IpAddress, // İp adresini kullanır.
+            };
+
+            await _context.RefreshTokens.AddAsync(refreshToken, cancellationToken);
+
+            await _context.SaveChangesAsync(cancellationToken);
+
+            return refreshToken;
         }
     }
 }

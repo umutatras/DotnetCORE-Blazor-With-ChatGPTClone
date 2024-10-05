@@ -1,5 +1,6 @@
 ﻿using ChatGPTClone.Application.Common.Interfaces;
 using ChatGPTClone.Application.Common.Models.General;
+using ChatGPTClone.Application.Common.Models.Identity;
 using MediatR;
 
 namespace ChatGPTClone.Application.Features.Auth.Commands.RefreshToken
@@ -13,9 +14,13 @@ namespace ChatGPTClone.Application.Features.Auth.Commands.RefreshToken
             _identityService = identityService;
         }
 
-        public Task<ResponseDto<AuthRefreshTokenResponse>> Handle(AuthRefreshTokenCommand request, CancellationToken cancellationToken)
+        public async Task<ResponseDto<AuthRefreshTokenResponse>> Handle(AuthRefreshTokenCommand request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var identityRefreshTokenRequest = new IdentityRefreshTokenRequest(request.AccessToken, request.RefreshToken);
+
+            var identityRefreshTokenResponse = await _identityService.RefreshTokenAsync(identityRefreshTokenRequest, cancellationToken);
+
+            return new ResponseDto<AuthRefreshTokenResponse>(new AuthRefreshTokenResponse(identityRefreshTokenResponse.AccessToken, identityRefreshTokenResponse.Expires), "Token refreshed successfully");
         }
     }
 }

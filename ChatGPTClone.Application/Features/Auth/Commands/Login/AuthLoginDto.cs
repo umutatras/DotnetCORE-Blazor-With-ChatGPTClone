@@ -6,18 +6,25 @@ namespace ChatGPTClone.Application.Features.Auth.Commands.Login
     {
         public string Token { get; set; }
         public DateTime ExpiresAt { get; set; }
-        public AuthLoginDto(string token, DateTime expiresAt)
+        public string RefreshToken { get; set; }
+        public DateTime RefreshTokenExpiresAt { get; set; }
+
+        public AuthLoginDto()
+        {
+
+        }
+
+        public AuthLoginDto(string token, DateTime expiresAt, string refreshToken, DateTime refreshTokenExpiresAt)
         {
             Token = token;
             ExpiresAt = expiresAt;
+            RefreshToken = refreshToken;
+            RefreshTokenExpiresAt = refreshTokenExpiresAt;
         }
-        public AuthLoginDto()
-        {
-            
-        }
+
         public static AuthLoginDto FromIdentityLoginResponse(IdentityLoginResponse response)
         {
-            return new AuthLoginDto(response.Token, response.ExpiresAt);
+            return new AuthLoginDto(response.Token, response.ExpiresAt, response.RefreshToken, response.RefreshTokenExpiresAt);
         }
     }
 }
