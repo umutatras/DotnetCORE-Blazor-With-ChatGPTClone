@@ -9,6 +9,11 @@ namespace ChatGPTClone.Application.Features.ChatSessions.Queries.GetAll
     {
         private readonly IChatSessionCacheService _cacheService;
 
+        public ChatSessionGetAllQueryHandler(IChatSessionCacheService cacheService)
+        {
+            _cacheService = cacheService;
+        }
+
         public  Task<List<ChatSessionGetAllDto>> Handle(ChatSessionGetAllQuery request, CancellationToken cancellationToken)
         {
             return  _cacheService.GetAllAsync(cancellationToken);

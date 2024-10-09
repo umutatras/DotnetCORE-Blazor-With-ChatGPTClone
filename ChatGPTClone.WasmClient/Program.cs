@@ -2,6 +2,7 @@ using Blazored.LocalStorage;
 using ChatGPTClone.WasmClient;
 using ChatGPTClone.WasmClient.AuthStateProviders;
 using ChatGPTClone.WasmClient.HttpClientDelegators;
+using ChatGPTClone.WasmClient.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -35,5 +36,6 @@ builder.Services.AddBlazoredLocalStorage(config =>
     config.JsonSerializerOptions.WriteIndented = false;
 });
 builder.Services.AddScoped<AuthenticationStateProvider,CustomJwtAuthStateProvider>();
+builder.Services.AddSingleton<ThemeService>();
 builder.Services.AddAuthorizationCore();
 await builder.Build().RunAsync();
