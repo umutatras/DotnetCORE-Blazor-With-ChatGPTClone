@@ -36,6 +36,6 @@ builder.Services.AddBlazoredLocalStorage(config =>
     config.JsonSerializerOptions.WriteIndented = false;
 });
 builder.Services.AddScoped<AuthenticationStateProvider,CustomJwtAuthStateProvider>();
-builder.Services.AddSingleton<ThemeService>();
+builder.Services.AddScoped<ThemeService>();
 builder.Services.AddAuthorizationCore();
 await builder.Build().RunAsync();
