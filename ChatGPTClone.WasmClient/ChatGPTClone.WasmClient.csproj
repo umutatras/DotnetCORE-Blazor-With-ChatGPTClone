@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Layout\TopBar.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.7" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="8.0.8" />
@@ -15,6 +19,18 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ChatGPTClone.Application\ChatGPTClone.Application.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Layout\TopBar.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Layout\TopBar.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Layout\TopBar.razor" />
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,12 @@
 ﻿using Blazored.LocalStorage;
+using ChatGPTClone.Application.Common.Models.Errors;
+using ChatGPTClone.Application.Common.Models.General;
 using ChatGPTClone.Application.Features.Auth.Commands.Login;
+using ChatGPTClone.Application.Features.Auth.Commands.RefreshToken;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Security.Claims;
 
 namespace ChatGPTClone.WasmClient.AuthStateProviders
@@ -10,16 +15,19 @@ namespace ChatGPTClone.WasmClient.AuthStateProviders
     {
         private readonly ILocalStorageService _localStorage;
         private readonly HttpClient _httpClient;
-        public CustomJwtAuthStateProvider(ILocalStorageService localStorageService, HttpClient httpClient)
+        private readonly NavigationManager _navigationManager;
+
+        public CustomJwtAuthStateProvider(ILocalStorageService localStorageService, HttpClient httpClient, NavigationManager navigationManager)
         {
             _localStorage = localStorageService;
             _httpClient = httpClient;
+            _navigationManager = navigationManager;
         }
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
             var authLoginDto = await _localStorage.GetItemAsync<AuthLoginDto>("user-token");
 
-            if (authLoginDto is null || string.IsNullOrEmpty(authLoginDto.Token))
+            if (authLoginDto is null || string.IsNullOrEmpty(authLoginDto.Token) || authLoginDto.RefreshTokenExpiresAt < DateTime.UtcNow)
             {
                 // Anonymous user
                 var anonymousUser = new ClaimsPrincipal(new ClaimsIdentity());
@@ -29,11 +37,32 @@ namespace ChatGPTClone.WasmClient.AuthStateProviders
 
                 _httpClient.DefaultRequestHeaders.Authorization = null;
 
+                await _localStorage.RemoveItemAsync("user-token");
+
                 // Return the anonymous user
                 return new AuthenticationState(anonymousUser);
             }
 
-            var claims = ParseClaimsFromJwt(authLoginDto.Token);
+            var cts = new CancellationTokenSource();
+
+            var refreshTokenResponse = await RefreshTokenAsync(authLoginDto, cts.Token);
+
+            if (!refreshTokenResponse.Success)
+            {
+                await _localStorage.RemoveItemAsync("user-token");
+
+                var anonymousUser = new ClaimsPrincipal(new ClaimsIdentity());
+
+                NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(anonymousUser)));
+
+                _httpClient.DefaultRequestHeaders.Authorization = null;
+
+                _navigationManager.NavigateTo("/auth/login");
+
+                return new AuthenticationState(anonymousUser);
+            }
+
+            var claims = ParseClaimsFromJwt(refreshTokenResponse.Data.Token);
 
             var authenticatedUser = new ClaimsPrincipal(new ClaimsIdentity(claims, "jwt"));
 
@@ -41,10 +70,39 @@ namespace ChatGPTClone.WasmClient.AuthStateProviders
 
             NotifyAuthenticationStateChanged(Task.FromResult(authState));
 
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authLoginDto.Token);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", refreshTokenResponse.Data.Token);
+
+            await _localStorage.SetItemAsync("user-token", new AuthLoginDto(refreshTokenResponse.Data.Token, refreshTokenResponse.Data.ExpiresAt, authLoginDto.RefreshToken, authLoginDto.RefreshTokenExpiresAt));
 
             return authState;
         }
+
+        private async Task<ResponseDto<AuthRefreshTokenResponse>> RefreshTokenAsync(AuthLoginDto authLoginDto, CancellationToken cancellationToken)
+        {
+            var refreshTokenCommand = new AuthRefreshTokenCommand(authLoginDto.Token, authLoginDto.RefreshToken);
+
+            try
+            {
+                var response = await _httpClient
+                .PostAsJsonAsync("auth/refresh-token", refreshTokenCommand, cancellationToken);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseDto = await response
+                        .Content
+                        .ReadFromJsonAsync<ResponseDto<AuthRefreshTokenResponse>>(cancellationToken: cancellationToken);
+
+                    return responseDto!;
+                }
+
+                return new ResponseDto<AuthRefreshTokenResponse>("Refresh token failed", new List<ErrorDto>());
+            }
+            catch (Exception)
+            {
+                return new ResponseDto<AuthRefreshTokenResponse>("Refresh token failed", new List<ErrorDto>());
+            }
+        }
+
         private static IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
         {
             var payload = jwt.Split('.')[1];
