@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Components\ChatUI.razor" />
     <Content Remove="Layout\TopBar.razor" />
   </ItemGroup>
 
@@ -26,11 +27,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="Components\ChatUI.razor" />
     <_ContentIncludedByDefault Remove="Layout\TopBar.razor" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Components\ChatUI.razor" />
     <None Include="Layout\TopBar.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Components\ChatUI.razor" />
   </ItemGroup>
 
 </Project>

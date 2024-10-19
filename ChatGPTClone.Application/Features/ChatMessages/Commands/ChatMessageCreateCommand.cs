@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ChatGPTClone.Application.Features.ChatMessages.Commands
 {
-    public class ChatMessageCreateCommand:IRequest<ResponseDto<List<ChatMessage>>>
+    public class ChatMessageCreateCommand :IRequest<ResponseDto<ChatThread>>
     {
         public Guid ChatSessionId { get; set; }
         public string? ThreadId { get; set; }
