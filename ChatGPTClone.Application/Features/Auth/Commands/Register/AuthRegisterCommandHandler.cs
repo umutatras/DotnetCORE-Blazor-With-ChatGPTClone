@@ -20,7 +20,7 @@ namespace ChatGPTClone.Application.Features.Auth.Commands.Register
         {
             var response=await _identityService.RegisterAsync(request.ToIdentityRegisterRequest(), cancellationToken);
             await _emailService.EmailVerificationAsync(new EmailVerificationDto(response.Email, response.EmailToken),cancellationToken);
-            return new ResponseDto<AuthRegisterDto>(AuthRegisterDto.Create(response),"User Register Successfuly");
+            return new ResponseDto<AuthRegisterDto>(AuthRegisterDto.Create(response),"User Register Successfuly"); 
 
         }
     }
