@@ -22,6 +22,7 @@ namespace ChatGPTClone.Application.Features.Auth.Commands.Register
             await _emailService.EmailVerificationAsync(new EmailVerificationDto(response.Email, response.EmailToken),cancellationToken);
             return new ResponseDto<AuthRegisterDto>(AuthRegisterDto.Create(response),"User Register Successfuly"); 
 
+
         }
     }
 }
